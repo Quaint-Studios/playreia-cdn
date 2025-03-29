@@ -1,38 +1,11 @@
-# sv
+# playreia-cdn
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+This is the service used to act as host for CDN files.
 
-## Creating a project
+## Process
 
-If you're seeing this, you've probably already done this step. Congrats!
+1. Vercel hosts the files and serves them in `/static/<file_or_folder>`
+2. We configured our DNS to route to Vercel and then we setup another DNS at [cdn.playreia.com](https://cdn.playreia.com) to redirect to our CDN provider (currently Fastly)
+3. On the CDN provider, we set the origin to point to the Vercel domain and then we set the domain on the CDN to be cdn.playreia.com
 
-```bash
-# create a new project in the current directory
-npx sv create
-
-# create a new project in my-app
-npx sv create my-app
-```
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+We can now use cdn.playreia.com to route through Fastly to save on bandwidth and to serve images closer to users. This setup also allows us to easily fallback to another service via the DNS if anything ever happens to Fastly 10 years from now.
